@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getCollections,
+  getAllCollectionsAdmin,
   getCollectionBySlug,
   createCollection,
   updateCollection,
@@ -11,6 +12,7 @@ import { protect } from "../middleware/auth.js";
 const router = Router();
 
 router.route("/").get(getCollections).post(protect, createCollection);
+router.get("/admin/all", protect, getAllCollectionsAdmin);
 router.get("/:slug", getCollectionBySlug);
 router
   .route("/:id")

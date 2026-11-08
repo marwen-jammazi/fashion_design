@@ -63,3 +63,7 @@ export const deleteCollection = asyncHandler(async (req, res) => {
   await collection.deleteOne();
   res.json({ message: "Collection deleted" });
 });
+export const getAllCollectionsAdmin = asyncHandler(async (req, res) => {
+  const collections = await Collection.find().sort({ order: 1, year: -1 });
+  res.json(collections);
+});

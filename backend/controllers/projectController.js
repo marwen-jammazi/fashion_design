@@ -69,3 +69,9 @@ export const deleteProject = asyncHandler(async (req, res) => {
   await project.deleteOne();
   res.json({ message: "Project deleted" });
 });
+export const getAllProjectsAdmin = asyncHandler(async (req, res) => {
+  const projects = await Project.find()
+    .populate("collectionId", "title slug")
+    .sort({ order: 1, createdAt: -1 });
+  res.json(projects);
+});
