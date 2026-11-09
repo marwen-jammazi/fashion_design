@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../api/client";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import Lightbox from "../components/Lightbox";
 
 export default function ProjectDetail() {
@@ -8,6 +9,7 @@ export default function ProjectDetail() {
   const [project, setProject] = useState(null);
   const [error, setError] = useState("");
   const [active, setActive] = useState(null);
+  useDocumentTitle(project?.title);
 
   useEffect(() => {
     api

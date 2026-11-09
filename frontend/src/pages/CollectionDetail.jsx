@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../api/client";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 export default function CollectionDetail() {
   const { slug } = useParams();
   const [collection, setCollection] = useState(null);
   const [error, setError] = useState("");
+  useDocumentTitle(collection?.title);
 
   useEffect(() => {
     api

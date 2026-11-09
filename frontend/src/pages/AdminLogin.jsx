@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import useAuth from "../context/useAuth";
+import useNoIndex from "../hooks/useNoIndex";
 
 export default function AdminLogin() {
   const { token, login } = useAuth();
+  useNoIndex();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");

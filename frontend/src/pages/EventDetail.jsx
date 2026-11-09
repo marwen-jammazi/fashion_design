@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../api/client";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import Countdown from "../components/Countdown";
 import { eventLabel, formatDateTime } from "../utils/time";
 
@@ -10,6 +11,7 @@ export default function EventDetail() {
   const { slug } = useParams();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
+  useDocumentTitle(event?.title);
   const [form, setForm] = useState(emptyForm);
   const [status, setStatus] = useState("");
 

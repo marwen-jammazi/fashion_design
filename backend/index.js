@@ -15,6 +15,11 @@ import eventRoutes from "./routes/eventRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
+
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  console.error("JWT_SECRET is missing or too short (use at least 32 random characters). Refusing to start.");
+  process.exit(1);
+}
 connectDB();
 
 const app = express();

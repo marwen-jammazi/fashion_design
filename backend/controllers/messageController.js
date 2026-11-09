@@ -1,6 +1,7 @@
 import Message from "../models/Message.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import pick from "../utils/pick.js";
+import { notifyNewMessage } from "../utils/mailer.js";
 
 export const createMessage = asyncHandler(async (req, res) => {
   const data = pick(req.body, ["name", "email", "subject", "message"]);
@@ -10,7 +11,8 @@ export const createMessage = asyncHandler(async (req, res) => {
     return res.status(201).json({ message: "Message sent" });
   }
 
-  await Message.create(data);
+  const saved = await Message.create(data);
+  notifyNewMessage(saved);
   res.status(201).json({ message: "Message sent" });
 });
 

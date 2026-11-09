@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
 import useAuth from "../context/useAuth";
+import useNoIndex from "../hooks/useNoIndex";
 
 const links = [
   { to: "/admin", label: "Dashboard", end: true },
@@ -8,10 +10,16 @@ const links = [
   { to: "/admin/events", label: "Events" },
   { to: "/admin/messages", label: "Messages" },
   { to: "/admin/profile", label: "Profile" },
+  { to: "/admin/settings", label: "Settings" },
 ];
 
 export default function AdminLayout() {
   const { admin, logout } = useAuth();
+  useNoIndex();
+
+  useEffect(() => {
+    document.title = "Admin";
+  }, []);
 
   return (
     <div className="admin-shell">

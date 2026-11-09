@@ -548,3 +548,17 @@ a.admin-stat:hover { transform: translateY(-6px); }
   .applicant { grid-template-columns: 1fr; }
   .applicant .row-actions { justify-content: flex-start; }
 }
+
+/* ---------- Admin access, dashboard additions ---------- */
+.pill.dash-btn { background: var(--ink); color: #fff; box-shadow: 5px 5px 12px rgba(42, 34, 53, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.6); }
+.footer-link { margin-left: 16px; text-decoration: underline; text-underline-offset: 3px; opacity: 0.7; }
+.footer-link:hover { opacity: 1; }
+.c-sky { background: linear-gradient(150deg, #e3f0ff, #b5d5f5); }
+.date-tile {
+  width: 56px; height: 56px; border-radius: 18px; display: grid; place-content: center;
+  text-align: center; line-height: 1.1;
+  background: linear-gradient(150deg, var(--peach), var(--lilac)); box-shadow: var(--clay-sm);
+}
+.date-tile strong { font-family: var(--display); font-size: 1.25rem; }
+.date-tile span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.admin-form.narrow { max-width: 520px; grid-template-columns: 1fr; }

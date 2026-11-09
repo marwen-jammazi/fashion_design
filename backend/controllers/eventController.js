@@ -3,6 +3,7 @@ import Registration from "../models/Registration.js";
 import cloudinary from "../config/cloudinary.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import pick from "../utils/pick.js";
+import { notifyNewApplication, notifyApplicationStatus } from "../utils/mailer.js";
 import { decorate, seatsTakenMap } from "../utils/eventState.js";
 
 const FIELDS = [
@@ -84,7 +85,8 @@ export const registerForEvent = asyncHandler(async (req, res) => {
   }
 
   try {
-    await Registration.create({ ...data, guests, eventId: event._id });
+    const reg = await Registration.create({ ...data, guests, eventId: event._id });
+    notifyNewApplication(event, reg);
   } catch (err) {
     if (err.code === 11000) {
       res.status(400);
@@ -194,6 +196,10 @@ export const updateRegistration = asyncHandler(async (req, res) => {
   if (!reg) {
     res.status(404);
     throw new Error("Application not found");
+  }
+  if (status !== "pending") {
+    const ev = await Event.findById(reg.eventId);
+    if (ev) notifyApplicationStatus(ev, reg);
   }
   res.json(reg);
 });

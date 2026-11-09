@@ -29,6 +29,12 @@ export default function AuthProvider({ children }) {
     setAdmin(res.data.admin);
   };
 
+  // used after a password change, which issues a fresh token
+  const updateToken = (newToken) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
@@ -36,7 +42,7 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, admin, loading, login, logout }}>
+    <AuthContext.Provider value={{ token, admin, loading, login, logout, updateToken }}>
       {children}
     </AuthContext.Provider>
   );

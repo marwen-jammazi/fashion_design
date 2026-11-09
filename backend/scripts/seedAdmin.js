@@ -14,9 +14,8 @@ const run = async () => {
 
   await mongoose.connect(MONGO_URI);
 
-  const existing = await Admin.findOne({ email: ADMIN_EMAIL });
-  if (existing) {
-    console.log("Admin already exists, nothing to do");
+  if ((await Admin.countDocuments()) > 0) {
+    console.log("An admin account already exists. Nothing to do.");
   } else {
     await Admin.create({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
     console.log(`Admin created: ${ADMIN_EMAIL}`);

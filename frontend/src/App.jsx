@@ -19,6 +19,7 @@ import AdminEvents from "./pages/AdminEvents";
 import AdminApplicants from "./pages/AdminApplicants";
 import AdminMessages from "./pages/AdminMessages";
 import AdminProfile from "./pages/AdminProfile";
+import AdminSettings from "./pages/AdminSettings";
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/admin/events/:id/applicants" element={<AdminApplicants />} />
           <Route path="/admin/messages" element={<AdminMessages />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
       </Route>
     </Routes>
