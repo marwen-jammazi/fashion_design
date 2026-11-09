@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
 import heroImg from "../assets/hero.png";
+import UpcomingEvents from "../components/UpcomingEvents";
 
 export default function Home() {
   const [projects, setProjects] = useState([]);
@@ -38,7 +39,7 @@ export default function Home() {
         {/* Hero */}
         <section className="hero-card glass">
           <div className="hero-text">
-            <p className="tiny">Fashion Designer</p>
+            <p className="tiny">{profile?.role || "Portfolio"}</p>
             <h1>{profile?.name || "Welcome"}</h1>
             {profile?.tagline && <p className="hero-sub">{profile.tagline}</p>}
             <Link to="/collections" className="btn">View collections</Link>
@@ -101,6 +102,7 @@ export default function Home() {
         </section>
       </div>
 
+      <UpcomingEvents />
       {/* Selected work */}
       <section className="panel glass">
         <div className="panel-head">

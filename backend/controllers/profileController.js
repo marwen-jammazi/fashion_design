@@ -3,7 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import pick from "../utils/pick.js";
 
 const FIELDS = [
-  "name", "tagline", "bio", "photo", "email", "location", "social",
+  "name", "tagline", "role", "bio", "photo", "email", "location", "social",
 ];
 
 // there is only ever one profile document

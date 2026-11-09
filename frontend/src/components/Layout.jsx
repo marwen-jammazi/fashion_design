@@ -31,6 +31,7 @@ export default function Layout() {
         <div className={open ? "nav-wrap open" : "nav-wrap"}>
           <nav className="nav">
             <NavLink to="/collections" onClick={close}>Collections</NavLink>
+            <NavLink to="/events" onClick={close}>Events</NavLink>
             <NavLink to="/about" onClick={close}>About</NavLink>
             <NavLink to="/contact" onClick={close}>Contact</NavLink>
           </nav>

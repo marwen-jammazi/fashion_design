@@ -19,6 +19,7 @@ export default function AdminProfile() {
         setForm({
           name: p.name || "",
           tagline: p.tagline || "",
+          role: p.role || "",
           bio: p.bio || "",
           email: p.email || "",
           location: p.location || "",
@@ -94,6 +95,10 @@ export default function AdminProfile() {
             value={form.location}
             onChange={(e) => set("location", e.target.value)}
           />
+        </label>
+        <label className="field full">
+          <span>Role (shown above your name on the home page)</span>
+          <input value={form.role} onChange={(e) => set("role", e.target.value)} placeholder="Fashion designer and event host" />
         </label>
         <label className="field full">
           <span>Bio</span>

@@ -11,6 +11,7 @@ import collectionRoutes from "./routes/collectionRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -33,6 +34,7 @@ app.use("/api/collections", collectionRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/events", eventRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

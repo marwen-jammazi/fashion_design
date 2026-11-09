@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const profileSchema = new mongoose.Schema(
   {
     name: { type: String, default: "" },
-    tagline: { type: String, default: "" }, // e.g. "Fashion Designer based in Tunis"
+    tagline: { type: String, default: "" },
+    role: { type: String, default: "" }, // e.g. "Fashion Designer based in Tunis"
     bio: { type: String, default: "" },
     photo: {
       url: { type: String, default: "" },
