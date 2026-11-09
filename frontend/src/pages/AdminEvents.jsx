@@ -92,8 +92,8 @@ export default function AdminEvents() {
     if (!startsAt) return setError("Choose a start date and time");
     if (endsAt && new Date(endsAt) <= new Date(startsAt))
       return setError("The end time must be after the start time");
-    if (deadline && new Date(deadline) > new Date(startsAt))
-      return setError("The application deadline must be before the event starts");
+    if (deadline && new Date(deadline) > new Date(endsAt || new Date(startsAt).getTime() + 3 * 60 * 60 * 1000))
+      return setError("The application deadline must be before the event ends");
 
     setSaving(true);
     const payload = {
@@ -214,7 +214,7 @@ export default function AdminEvents() {
             />
           </label>
           <label className="field">
-            <span>Apply before (optional, otherwise the start time)</span>
+            <span>Apply until (optional, otherwise the start time)</span>
             <input
               type="datetime-local"
               value={form.registrationDeadline}

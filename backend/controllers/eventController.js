@@ -19,10 +19,10 @@ const checkDates = (res, e) => {
   }
   if (
     e.registrationDeadline &&
-    new Date(e.registrationDeadline) > new Date(e.startsAt)
+    new Date(e.registrationDeadline) > new Date(e.endsAt || new Date(e.startsAt).getTime() + 3 * 60 * 60 * 1000)
   ) {
     res.status(400);
-    throw new Error("The registration deadline must be before the event starts");
+    throw new Error("The application deadline must be before the event ends");
   }
 };
 

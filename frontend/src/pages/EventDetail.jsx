@@ -140,7 +140,7 @@ export default function EventDetail() {
           ) : (
             <div className="apply-card">
               <h2>{label.text}</h2>
-              <p className="meta">New applications are not being accepted for this event.</p>
+              <p className="meta">{event.state === "ended" ? "This event has ended." : event.spotsLeft === 0 ? "All spots are taken." : event.registrationOpen ? "The application deadline has passed." : "Applications were closed by the organizer."}</p>
             </div>
           )}
         </aside>
