@@ -20,31 +20,40 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
   console.error("JWT_SECRET is missing or too short (use at least 32 random characters). Refusing to start.");
   process.exit(1);
 }
+
 connectDB();
 
 const app = express();
+const isProd = process.env.NODE_ENV === "production";
 
-app.use(helmet());
+// behind Render's proxy, trust it so req.ip is the real visitor address
+// (rate limits and the login lockout depend on it)
+if (isProd) app.set("trust proxy", Number(process.env.TRUST_PROXY) || 1);
+
+// CLIENT_URL can hold several addresses separated by commas
 const allowedOrigins = (process.env.CLIENT_URL || "")
   .split(",")
   .map((s) => s.trim().replace(/\/$/, ""))
   .filter(Boolean);
 
+app.use(helmet());
 app.use(
   cors({
     origin: (origin, cb) => {
-      // no Origin header = not a browser (curl, server to server): allow
-      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-      cb(null, false);
+      // no Origin header = not a browser (curl, health checks): allow
+      cb(null, !origin || allowedOrigins.includes(origin));
     },
   })
 );
-app.use(express.json());
-app.use(morgan("dev"));
+app.use(express.json({ limit: "100kb" }));
+app.use(morgan(isProd ? "combined" : "dev"));
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Portfolio API is running" });
 });
+
+// shows the address the server sees for you (used once to check the proxy setting)
+app.get("/api/ip", (req, res) => res.json({ ip: req.ip }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/uploads", uploadRoutes);
