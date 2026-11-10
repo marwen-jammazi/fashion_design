@@ -25,7 +25,20 @@ connectDB();
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      // no Origin header = not a browser (curl, server to server): allow
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      cb(null, false);
+    },
+  })
+);
 app.use(express.json());
 app.use(morgan("dev"));
 
