@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
 
+const questionSchema = new mongoose.Schema({
+  label: { type: String, required: true, trim: true, maxlength: 120 },
+  type: { type: String, enum: ["text", "textarea", "select"], default: "text" },
+  required: { type: Boolean, default: false },
+  options: [{ type: String, trim: true }],
+});
+
 const eventSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
@@ -19,6 +26,7 @@ const eventSchema = new mongoose.Schema(
     price: { type: String, default: "Free", trim: true },
     registrationOpen: { type: Boolean, default: true },
     isPublished: { type: Boolean, default: true },
+    questions: [questionSchema],
   },
   { timestamps: true }
 );

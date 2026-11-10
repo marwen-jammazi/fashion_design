@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
 import ImageUploader from "../components/ImageUploader";
+import QuestionBuilder from "../components/QuestionBuilder";
 import {
   eventLabel,
   formatDateTime,
@@ -23,6 +24,7 @@ const emptyForm = {
   registrationOpen: true,
   isPublished: true,
   coverImage: emptyImage,
+  questions: [],
 };
 
 export default function AdminEvents() {
@@ -70,6 +72,7 @@ export default function AdminEvents() {
       registrationOpen: ev.registrationOpen,
       isPublished: ev.isPublished,
       coverImage: ev.coverImage?.url ? ev.coverImage : emptyImage,
+      questions: (ev.questions || []).map((q) => ({ k: q._id, _id: q._id, label: q.label, type: q.type, required: q.required, optionsText: (q.options || []).join(", ") })),
     });
     setError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -109,6 +112,7 @@ export default function AdminEvents() {
       registrationOpen: form.registrationOpen,
       isPublished: form.isPublished,
       coverImage: form.coverImage,
+      questions: form.questions.map((q) => ({ _id: q._id, label: q.label, type: q.type, required: q.required, options: q.optionsText.split(",").map((s) => s.trim()).filter(Boolean) })),
     };
 
     try {
@@ -278,6 +282,7 @@ export default function AdminEvents() {
             />
           </div>
 
+          <QuestionBuilder questions={form.questions} onChange={(arr) => set("questions", arr)} />
           {error && <p className="form-error full">{error}</p>}
           <div className="form-actions full">
             <button type="submit" className="btn" disabled={saving}>
@@ -323,6 +328,7 @@ export default function AdminEvents() {
                   Applicants
                 </Link>
                 <button className="btn-sm" onClick={() => startEdit(ev)}>Edit</button>
+                <button className="btn-sm" onClick={() => navigator.clipboard.writeText(`${window.location.origin}/events/${ev.slug}`).then(() => window.alert("Link copied")).catch(() => {})}>Copy link</button>
                 <button
                   className="btn-sm"
                   onClick={() => patch(ev, { registrationOpen: !ev.registrationOpen })}

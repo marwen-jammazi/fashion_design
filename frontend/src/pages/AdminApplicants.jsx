@@ -49,8 +49,23 @@ export default function AdminApplicants() {
   };
 
   const exportCsv = () => {
-    const head = ["Name", "Email", "Phone", "People", "Status", "Note", "Applied at"];
-    const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    // one column per question, including questions that were later removed
+    const labels = (event?.questions || []).map((q) => q.label);
+    items.forEach((r) =>
+      (r.answers || []).forEach((a) => {
+        if (!labels.includes(a.question)) labels.push(a.question);
+      })
+    );
+
+    const head = ["Name", "Email", "Phone", "People", "Status", "Note", ...labels, "Applied at"];
+
+    // a leading = + - @ would be run as a formula by Excel, so it is neutralised
+    const esc = (v) => {
+      let s = String(v ?? "");
+      if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+
     const rows = items.map((r) => [
       r.name,
       r.email,
@@ -58,8 +73,10 @@ export default function AdminApplicants() {
       r.guests,
       r.status,
       r.note,
+      ...labels.map((l) => (r.answers || []).find((a) => a.question === l)?.answer || ""),
       new Date(r.createdAt).toLocaleString(),
     ]);
+
     const csv =
       "\uFEFF" + [head, ...rows].map((row) => row.map(esc).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
@@ -122,6 +139,18 @@ export default function AdminApplicants() {
                 {r.email}
                 {r.phone ? ` - ${r.phone}` : ""} - {r.guests} {r.guests > 1 ? "people" : "person"}
               </p>
+
+              {r.answers?.length > 0 && (
+                <ul className="answers">
+                  {r.answers.map((a) => (
+                    <li key={a.question}>
+                      <span>{a.question}</span>
+                      {a.answer}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
               {r.note && <p className="msg-body">{r.note}</p>}
               <p className="meta">Applied {new Date(r.createdAt).toLocaleString()}</p>
             </div>

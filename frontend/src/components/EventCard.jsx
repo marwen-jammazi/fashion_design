@@ -11,8 +11,8 @@ export default function EventCard({ event: e }) {
         {e.coverImage?.url && (
           <img src={e.coverImage.url} alt={e.title} loading="lazy" />
         )}
-        {e.category && <span className="chip">{e.category}</span>}
       </div>
+      {e.category && <p className="eyebrow card-cat">{e.category}</p>}
       <h3>{e.title}</h3>
       <p className="meta">{formatDateTime(e.startsAt)}</p>
       {e.location && <p className="meta">{e.location}</p>}

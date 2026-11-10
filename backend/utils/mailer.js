@@ -81,6 +81,7 @@ export const notifyNewApplication = (event, reg) => {
       reg.phone ? `Phone: ${reg.phone}` : "",
       `People: ${reg.guests}`,
       reg.note ? `Note: ${reg.note}` : "",
+      ...(reg.answers || []).map((a) => `${a.question}: ${a.answer}`),
       "",
       `Review applications: ${site()}/admin/events/${event._id}/applicants`,
     ]

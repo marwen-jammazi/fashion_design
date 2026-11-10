@@ -13,6 +13,15 @@ const registrationSchema = new mongoose.Schema(
     phone: { type: String, default: "", trim: true },
     guests: { type: Number, default: 1, min: 1, max: 10 },
     note: { type: String, default: "", maxlength: 500 },
+    // answers to the event's custom questions (the question text is stored
+    // with the answer, so later edits to the event do not change old answers)
+    answers: [
+      {
+        _id: false,
+        question: { type: String, trim: true },
+        answer: { type: String, trim: true, maxlength: 500 },
+      },
+    ],
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

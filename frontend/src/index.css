@@ -562,3 +562,43 @@ a.admin-stat:hover { transform: translateY(-6px); }
 .date-tile strong { font-family: var(--display); font-size: 1.25rem; }
 .date-tile span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
 .admin-form.narrow { max-width: 520px; grid-template-columns: 1fr; }
+
+/* ---------- Posters, contact page, questions, sharing ---------- */
+.event-card { align-self: start; }
+.event-card .card-img { aspect-ratio: auto; }
+.event-card .card-img:empty { aspect-ratio: 4 / 3; }
+.event-card .card-img img { height: auto; object-fit: contain; }
+.card-cat { margin: 16px 8px 0; }
+.card-cat + h3 { margin-top: 6px; }
+.event-cover img { height: auto; max-height: 80vh; object-fit: contain; margin: 0 auto; }
+
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn.ghost { background: rgba(255, 255, 255, 0.35); }
+.btn.ghost:hover { background: var(--lime); }
+
+.contact-layout { display: grid; gap: 32px; grid-template-columns: 1.2fr 1fr; align-items: start; }
+.contact-layout .form { max-width: none; margin-top: 0; }
+.contact-info.apply-card { position: static; }
+.contact-info h2 { margin-bottom: 14px; }
+.info-list { list-style: none; display: grid; gap: 16px; margin-bottom: 18px; }
+.info-list span { display: block; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.info-list a { text-decoration: underline; text-underline-offset: 3px; }
+
+.event-actions { display: grid; gap: 22px; margin-top: 28px; }
+.event-actions .eyebrow { margin-bottom: 10px; }
+.row-actions.left { justify-content: flex-start; }
+
+.answers { list-style: none; display: grid; gap: 6px; margin: 10px 0; font-size: 0.9rem; }
+.answers span { display: inline-block; min-width: 150px; margin-right: 10px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+.q-builder { display: grid; gap: 14px; }
+.q-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.q-item { display: grid; gap: 10px; padding: 16px; border-radius: 24px; background: var(--bg); box-shadow: var(--clay-in); }
+.q-row { display: grid; grid-template-columns: 1fr 190px; gap: 10px; }
+.q-item input, .q-item select { padding: 12px 16px; border-radius: 16px; }
+.q-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .contact-layout { grid-template-columns: 1fr; }
+  .q-row { grid-template-columns: 1fr; }
+}

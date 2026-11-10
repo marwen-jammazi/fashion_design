@@ -3,24 +3,51 @@ import Registration from "../models/Registration.js";
 import cloudinary from "../config/cloudinary.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import pick from "../utils/pick.js";
-import { notifyNewApplication, notifyApplicationStatus } from "../utils/mailer.js";
 import { decorate, seatsTakenMap } from "../utils/eventState.js";
+import { notifyNewApplication, notifyApplicationStatus } from "../utils/mailer.js";
 
 const FIELDS = [
   "title", "category", "description", "coverImage", "location",
   "startsAt", "endsAt", "registrationDeadline", "capacity",
-  "price", "registrationOpen", "isPublished",
+  "price", "registrationOpen", "isPublished", "questions",
 ];
 
+const THREE_HOURS = 3 * 60 * 60 * 1000;
+const QUESTION_TYPES = ["text", "textarea", "select"];
+
+const cleanQuestions = (list) => {
+  if (!Array.isArray(list)) return [];
+  return list
+    .slice(0, 10)
+    .map((q) => {
+      const label = String(q?.label || "").trim().slice(0, 120);
+      const options = Array.isArray(q?.options)
+        ? q.options.map((o) => String(o).trim()).filter(Boolean).slice(0, 20)
+        : [];
+      let type = QUESTION_TYPES.includes(q?.type) ? q.type : "text";
+      if (type === "select" && options.length < 2) type = "text";
+      const clean = {
+        label,
+        type,
+        required: !!q?.required,
+        options: type === "select" ? options : [],
+      };
+      if (q?._id) clean._id = q._id;
+      return clean;
+    })
+    .filter((q) => q.label);
+};
+
 const checkDates = (res, e) => {
+  const end = e.endsAt
+    ? new Date(e.endsAt)
+    : new Date(new Date(e.startsAt).getTime() + THREE_HOURS);
+
   if (e.endsAt && new Date(e.endsAt) <= new Date(e.startsAt)) {
     res.status(400);
     throw new Error("The end time must be after the start time");
   }
-  if (
-    e.registrationDeadline &&
-    new Date(e.registrationDeadline) > new Date(e.endsAt || new Date(e.startsAt).getTime() + 3 * 60 * 60 * 1000)
-  ) {
+  if (e.registrationDeadline && new Date(e.registrationDeadline) > end) {
     res.status(400);
     throw new Error("The application deadline must be before the event ends");
   }
@@ -84,8 +111,33 @@ export const registerForEvent = asyncHandler(async (req, res) => {
     throw new Error(`Only ${info.spotsLeft} spot(s) left`);
   }
 
+  // answers to the event's custom questions, validated against the event
+  const given =
+    req.body.answers && typeof req.body.answers === "object" ? req.body.answers : {};
+  const answers = [];
+  for (const q of event.questions) {
+    const value = String(given[String(q._id)] ?? "").trim().slice(0, 500);
+    if (!value) {
+      if (q.required) {
+        res.status(400);
+        throw new Error(`Please answer: ${q.label}`);
+      }
+      continue;
+    }
+    if (q.type === "select" && !q.options.includes(value)) {
+      res.status(400);
+      throw new Error(`Invalid answer for: ${q.label}`);
+    }
+    answers.push({ question: q.label, answer: value });
+  }
+
   try {
-    const reg = await Registration.create({ ...data, guests, eventId: event._id });
+    const reg = await Registration.create({
+      ...data,
+      guests,
+      answers,
+      eventId: event._id,
+    });
     notifyNewApplication(event, reg);
   } catch (err) {
     if (err.code === 11000) {
@@ -135,6 +187,7 @@ export const getEventsAdmin = asyncHandler(async (req, res) => {
 
 export const createEvent = asyncHandler(async (req, res) => {
   const data = pick(req.body, FIELDS);
+  if (data.questions !== undefined) data.questions = cleanQuestions(data.questions);
   checkDates(res, data);
   const event = await Event.create(data);
   res.status(201).json(event);
@@ -146,7 +199,9 @@ export const updateEvent = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Event not found");
   }
-  event.set(pick(req.body, FIELDS));
+  const data = pick(req.body, FIELDS);
+  if (data.questions !== undefined) data.questions = cleanQuestions(data.questions);
+  event.set(data);
   checkDates(res, event);
   await event.save();
   res.json(event);
