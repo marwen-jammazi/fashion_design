@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
 import heroImg from "../assets/hero.png";
+import HeroPhoto from "../components/HeroPhoto";
 import UpcomingEvents from "../components/UpcomingEvents";
 
 const safe = (req, fallback) => req.catch(() => ({ data: fallback }));
@@ -36,6 +37,7 @@ export default function Home() {
   const list = featured.length ? featured : projects;
   const spotlight = list[0];
   const latest = collections[0];
+  const photo = profile?.photo?.url || heroImg;
 
   const stats = [
     { value: collections.length, label: "Collections", color: "#6c8cf5" },
@@ -48,21 +50,19 @@ export default function Home() {
       <div className="bento">
         {/* Hero */}
         <section className="hero-card glass">
-          <div className="hero-text">
-            <p className="tiny">{profile?.role || "Portfolio"}</p>
-            <h1>{profile?.name || "Welcome"}</h1>
-            {profile?.tagline && <p className="hero-sub">{profile.tagline}</p>}
-            <div className="btn-row">
-              <Link to="/collections" className="btn">View work</Link>
-              <Link to="/events" className="btn ghost">See events</Link>
+          <div className="hero-main">
+            <div className="hero-text">
+              <p className="tiny">{profile?.role || "Portfolio"}</p>
+              <h1>{profile?.name || "Welcome"}</h1>
+              {profile?.tagline && <p className="hero-sub">{profile.tagline}</p>}
+              <div className="btn-row">
+                <Link to="/collections" className="btn">View work</Link>
+                <Link to="/events" className="btn ghost">See events</Link>
+              </div>
             </div>
-          </div>
 
-          <img
-            className="hero-photo"
-            src={profile?.photo?.url || heroImg}
-            alt={profile?.name || "Hero"}
-          />
+            <HeroPhoto key={photo} src={photo} alt={profile?.name || "Hero"} />
+          </div>
 
           <div className="stats">
             {stats.map((s) => (
