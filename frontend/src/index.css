@@ -648,3 +648,104 @@ a.admin-stat:hover { transform: translateY(-6px); }
   .hero-figure.framed { aspect-ratio: 1 / 1; }
   .hero-card .stats { gap: 16px 28px; }
 }
+
+/* ---------- Mobile polish ---------- */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+h1, h2, h3, p, li, a, dd, dt { overflow-wrap: break-word; }
+.mini-row > div, .admin-row > div, .applicant > div, .msg, .field { min-width: 0; }
+.msg-body, .applicant .meta, .msg .meta, .mini-clip { overflow-wrap: anywhere; }
+.mini-row strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-form { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.form input[type="date"], .form input[type="datetime-local"], .form input[type="time"] { min-width: 0; max-width: 100%; width: 100%; }
+.lightbox img { max-height: 90vh; max-height: 90dvh; touch-action: pan-y; }
+
+/* on touch screens, hover effects would stay "stuck" after a tap */
+@media (hover: none) {
+  .card:hover, .row-item:hover, .mini-row:hover, .steps a:hover, a.admin-stat:hover,
+  .btn-sm:hover, .pill:hover, .social a:hover, .round-btn:hover { transform: none; }
+  .card:hover .card-img img, .gallery-item:hover img, .spotlight:hover .tile img { transform: none; }
+  .btn:hover { transform: none; background: #fff; }
+  .btn.ghost:hover { background: rgba(255, 255, 255, 0.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important;
+  }
+}
+
+/* tablets and large phones */
+@media (max-width: 900px) {
+  .admin-form { grid-template-columns: minmax(0, 1fr); }
+  .admin-side { justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 30px; }
+  .admin-side .logo { order: 1; }
+  .admin-side-foot { order: 2; gap: 8px; }
+  .admin-side-foot .meta { display: none; }
+  .admin-side-foot .pill { padding: 10px 16px; font-size: 0.8rem; }
+  .admin-nav {
+    order: 3; flex: 0 0 100%; flex-wrap: nowrap; gap: 4px; padding-bottom: 4px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .admin-nav::-webkit-scrollbar { display: none; }
+  .admin-nav a { white-space: nowrap; flex-shrink: 0; padding: 12px 18px; }
+}
+
+/* phones */
+@media (max-width: 760px) {
+  .header { padding: 12px var(--pad); }
+  .logo { max-width: 62vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1.35rem; }
+  .nav-wrap { max-height: calc(100vh - 84px); max-height: calc(100dvh - 84px); overflow-y: auto; }
+
+  .grid.event-grid { grid-template-columns: 1fr; }
+  .portrait { max-width: 340px; margin: 0 auto; }
+  .upload-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+  /* comfortable tap targets, and 16px text so iPhones do not zoom into fields */
+  .btn-sm { padding: 11px 18px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .pill { padding: 12px 22px; }
+  .tool-btn { width: 40px; height: 40px; }
+  .check { padding: 10px 0; }
+  .form input[type="checkbox"] { width: 24px; height: 24px; }
+  .form input, .form select, .form textarea,
+  .upload-item input, .q-item input, .q-item select { font-size: 16px; }
+
+  .lb-arrow { font-size: 2.6rem; padding: 0 10px; }
+  .lb-close { top: 8px; right: 14px; }
+  .lightbox img { max-width: 96vw; border-radius: 14px; }
+  .msg-head { flex-wrap: wrap; }
+}
+
+@media (max-width: 600px) {
+  :root { --radius: 28px; }
+  .main { padding-top: 12px; padding-bottom: 56px; }
+  .panel, .dash-card, .apply-card { padding: 20px; }
+  .side-card { padding: 22px; min-height: 0; }
+  .panel-head, .dash-card-head { flex-wrap: wrap; gap: 12px; }
+  .event-cover { padding: 8px; }
+
+  .hero-card h1 { font-size: clamp(2.2rem, 11vw, 3rem); }
+  .btn-row .btn { flex: 1 1 140px; text-align: center; padding-left: 20px; padding-right: 20px; }
+
+  .admin-stats { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .admin-stat { min-height: 120px; padding: 18px; border-radius: 26px; }
+  .admin-stat strong { font-size: 2.2rem; margin-bottom: 8px; }
+  .stat-go { top: 14px; right: 14px; width: 30px; height: 30px; font-size: 1rem; }
+  .dash-hero .row-actions { justify-content: flex-start; }
+  .admin-top { align-items: flex-start; }
+  .admin-row h3 { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .countdown { gap: 8px; max-width: none; }
+  .count-box { padding: 14px 4px; border-radius: 20px; }
+  .count-box strong { font-size: 1.7rem; }
+  .count-box span { font-size: 0.58rem; letter-spacing: 0.06em; }
+}
+
+/* very small phones (320 to 340px) */
+@media (max-width: 340px) {
+  .grid { grid-template-columns: 1fr; }
+  .stats { gap: 14px 20px; }
+  .btn { padding: 14px 28px; }
+}

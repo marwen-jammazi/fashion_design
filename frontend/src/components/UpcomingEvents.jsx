@@ -22,7 +22,7 @@ export default function UpcomingEvents() {
         <h2 className="teaser-title">Upcoming events</h2>
         <Link to="/events" className="pill">All events</Link>
       </div>
-      <div className="grid">
+      <div className="grid event-grid">
         {events.map((e) => (
           <EventCard key={e._id} event={e} />
         ))}

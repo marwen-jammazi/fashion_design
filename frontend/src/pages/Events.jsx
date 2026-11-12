@@ -63,7 +63,7 @@ export default function Events() {
         </p>
       )}
 
-      <div className="grid">
+      <div className="grid event-grid">
         {events.map((e) => (
           <EventCard key={e._id} event={e} />
         ))}
